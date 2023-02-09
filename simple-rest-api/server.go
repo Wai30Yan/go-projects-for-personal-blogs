@@ -97,7 +97,7 @@ func updatePerson(w http.ResponseWriter, r *http.Request) {
 	for i, person := range People {
 		if person.ID == id {
 			People[i] = updatedPerson
-			json.NewEncoder(w).Encode(updatedPerson)
+			json.NewEncoder(w).Encode(People[i])
 			return
 		}
 	}
