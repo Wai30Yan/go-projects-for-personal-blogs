@@ -52,7 +52,7 @@ func main() {
 }
 
 func getPeople(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: getAllPerson")
+	fmt.Println("Endpoint Hit: getPeople")
 	json.NewEncoder(w).Encode(People)
 }
 
