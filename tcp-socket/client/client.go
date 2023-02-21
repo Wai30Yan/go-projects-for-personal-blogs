@@ -20,11 +20,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	conn, err := net.DialTCP("tcp", nil, tcpAddr)
+	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
 	for {
-		reader := bufio.NewReader(os.Stdin)
+		// reader := bufio.NewReader(os.Stdin)
 		fmt.Print(">> ")
-		text, _ := reader.ReadString('\n')
+		text, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 		fmt.Fprintf(conn, text+"\n")
 		message, _ := bufio.NewReader(conn).ReadString('\n')
 		fmt.Print("->: " + message)

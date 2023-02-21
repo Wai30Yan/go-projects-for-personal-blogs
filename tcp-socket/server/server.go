@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -22,9 +23,8 @@ func main() {
 	}
 
 	defer listener.Close()
+	conn, err := listener.Accept()
 	for {
-		conn, err := listener.Accept()
-
 		defer conn.Close()
 
 		if err != nil {
@@ -46,8 +46,7 @@ func main() {
         }
 
 		fmt.Println("client: " + temp)
-        response := "hello from server\n"
-        conn.Write([]byte(string(response)))
+        conn.Write([]byte("You sent "+ temp + " at " + time.Now().Format("15:04:05\n")))
 	}
 }
 
