@@ -1,5 +1,6 @@
 package main
 
+
 type GameBoard [][]int
 
 func main() {
