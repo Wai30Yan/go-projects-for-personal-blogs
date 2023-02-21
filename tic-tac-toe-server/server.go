@@ -24,7 +24,7 @@ func startServer(gb *GameBoard) {
 	for {
 		netData, _ := bufio.NewReader(conn).ReadString('\n')
 		temp := strings.TrimSpace(netData)
-		fmt.Println("client: " + temp)
+		fmt.Println(" client: " + temp)
 		_, err := strconv.Atoi(temp);
 
 		if err != nil {
@@ -38,15 +38,21 @@ func startServer(gb *GameBoard) {
 
 		(*gb)[row][col] = 1
 
-		score := checkWin(gb, conn)
+		rwin := rowCheckWin(gb)
+		cwin := colCheckWin(gb)
+		dwin := diagCheckWin(gb)
 
-		if score == 3 {
+		fmt.Print(gb, rwin, cwin, dwin)
+		
+		response, _ := json.Marshal(gb)
+
+		if rwin || cwin || dwin {
+			message := append(response, []byte("You Won!!!\n")...)
+			conn.Write(message)
 			break
 		}
 
-		fmt.Print(gb, score)
 
-		response, _ := json.Marshal(gb)
 
 		conn.Write([]byte(string(response)+"\n"))
 
@@ -54,19 +60,53 @@ func startServer(gb *GameBoard) {
 
 }
 
-func checkWin(gb *GameBoard, conn net.Conn) int {
+func colCheckWin(gb *GameBoard) bool {
+    for col := 0; col < 3; col++ {
+        var score int
+        for row := 0; row < 3; row++ {
+            score += (*gb)[row][col]
+        }
+        if score == 3 {
+			return true
+		}
+    }
+	return false
+}
+
+func rowCheckWin(gb *GameBoard) bool {
 	var score int
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
+	for i := range (*gb) {
+		for j := range (*gb)[i] {
 			if (*gb)[i][j] == 1 {
-				score++
+				score += (*gb)[i][j]
 			}
 		}
 		if score == 3 {
-			conn.Write([]byte("You won!!!\n"))
-		} else {
-			score = 0
+			return true
+		}
+		score = 0
+	}
+	return false
+}
+
+func diagCheckWin(gb *GameBoard) bool {
+	for i := 0; i < 3; i++ {
+		var score int
+		if i == 0 {
+			score = (*gb)[i][2] + (*gb)[1][1] + (*gb)[2][i]
+			fmt.Print("diagScore: ", score, "\n")
+			if score == 3 {
+				return true
+			}
+		}
+		for j := 0; j < 3; j++ {
+			if i == j {
+				score += (*gb)[i][j]
+			}
+			if score == 3 {
+				return true
+			}
 		}
 	}
-	return score
+	return false
 }
