@@ -1,35 +1,67 @@
 package main
 
 import (
-	"io"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
-
-	// "golang.org/x/net/html"
+	"text/template"
+	// "html/template"
 )
 
+var url string = "https://v2.jokeapi.dev/joke/Programming"
+
+type Joke struct {
+	Category string `json:"category"`
+	Type     string `json:"type"`
+	Joke     string `json:"joke"`
+	SetUp    string `json:"setup"`
+	Delivery string `json:"delivery"`
+	ID       int    `json:"id"`
+	Safe     bool   `json:"safe"`
+}
+
+var templ = `{{range .}}-------------------------
+Category: {{.Category}}
+Type: {{.Type}}
+{{if .Joke}}Joke: {{.Joke}} {{else}}SetUp: {{.SetUp}}
+Delivery: {{.Delivery}} {{end}}
+ID: {{.ID}}
+Safe: {{.Safe}}
+{{end}}`
+
+// var templ = `{{range .}}
+// <h3>Category: {{.Category}}</h3>
+// <h5>Type: {{.Type}}</h5>
+// {{if .Joke}}<p>Joke: {{.Joke}}</p> {{else}}<p>Setup: {{.SetUp}}</p>
+// <p>Delivery: {{.Delivery}}</p> {{end}}
+// <p>ID: {{.ID}},  Safe: {{.Safe}}</p>
+// {{end}}`
+
 func main() {
-	resp, err := http.Get("https://wai30yan.github.io/personal-blog/blogs/nmap/")
-	if err != nil {
-		log.Panic(err)
+	var jokes []Joke
+	for i := 0; i < 10; i++ {
+		joke := getJokes()
+		jokes = append(jokes, joke)
 	}
 
-	b, _ := io.ReadAll(resp.Body)
-	defer resp.Body.Close()
-
-	writeFile(b)
-
-
-
+	report, err := template.New("report").Parse(templ)
+	if err != nil {
+		log.Fatal(err)
+	}
+	report.Execute(os.Stdout, jokes)
+	
 }
 
-func readFile(fileName string) {
+func getJokes() Joke {
+	response, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
 
-}
+	var joke Joke	
+	json.NewDecoder(response.Body).Decode(&joke)
 
-func writeFile(b []byte) {
-	f, _ := os.Open("response.txt")
-	f.Write(b)
-	f.Close()
+	return joke
 }
