@@ -21,12 +21,12 @@ func startServer(gb *GameBoard) {
 	defer listener.Close()
 
 	conn, _ := listener.Accept()
-	fmt.Println("Game is started...")
+
 	for {
 		netData, _ := bufio.NewReader(conn).ReadString('\n')
 		temp := strings.TrimSpace(netData)
-		fmt.Println(" client: " + temp)
-		_, err := strconv.Atoi(temp);
+		fmt.Println("client: " + temp)
+		num, err := strconv.Atoi(temp);
 
 		if err != nil {
 			conn.Write([]byte("please use 2 digit integer\n"))
@@ -35,9 +35,10 @@ func startServer(gb *GameBoard) {
 
 		fmt.Println("turn: ", turn)
 
-		win := play(gb, temp, &turn)
+		win := play(gb, num, &turn)
 
-		fmt.Print(gb, win)
+		fmt.Println("board: ", gb)
+		fmt.Println("win: ", win)
 		
 		response, _ := json.Marshal(gb)
 
@@ -50,8 +51,7 @@ func startServer(gb *GameBoard) {
 	}
 }
 
-func play(gb *GameBoard, temp string, turn *bool) bool {
-	num, _ := strconv.Atoi(temp)
+func play(gb *GameBoard, num int, turn *bool) bool {
 	row := int(num / 10) - 1
 	col := int(num % 10) - 1
 
