@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"text/template"
+	// "os"
+	// "text/template"
 	// "html/template"
 )
 
@@ -45,12 +46,12 @@ func main() {
 		jokes = append(jokes, joke)
 	}
 
-	report, err := template.New("report").Parse(templ)
-	if err != nil {
-		log.Fatal(err)
-	}
-	report.Execute(os.Stdout, jokes)
-	
+	// report, err := template.New("report").Parse(templ)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// report.Execute(os.Stdout, jokes)
+	// jsonMarshal(jokes)
 }
 
 func getJokes() Joke {
@@ -62,6 +63,22 @@ func getJokes() Joke {
 
 	var joke Joke	
 	json.NewDecoder(response.Body).Decode(&joke)
-
+	
 	return joke
+}
+
+func jsonMarshal(jokes []Joke) {
+	for _, joke := range jokes {
+		data, err := json.Marshal(joke);
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%s\n", data)
+	}
+}
+
+func printJokes(jokes []Joke) {
+	for _, jk := range jokes {
+		fmt.Println(jk)
+	}
 }
