@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	// "os"
-	// "text/template"
+	"os"
+	"text/template"
 	// "html/template"
 )
 
@@ -31,6 +31,7 @@ ID: {{.ID}}
 Safe: {{.Safe}}
 {{end}}`
 
+// HTML Template
 // var templ = `{{range .}}
 // <h3>Category: {{.Category}}</h3>
 // <h5>Type: {{.Type}}</h5>
@@ -46,12 +47,12 @@ func main() {
 		jokes = append(jokes, joke)
 	}
 
-	// report, err := template.New("report").Parse(templ)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// report.Execute(os.Stdout, jokes)
-	// jsonMarshal(jokes)
+	report, err := template.New("report").Parse(templ)
+	if err != nil {
+		log.Fatal(err)
+	}
+	report.Execute(os.Stdout, jokes)
+	jsonMarshal(jokes)
 }
 
 func getJokes() Joke {
@@ -74,11 +75,5 @@ func jsonMarshal(jokes []Joke) {
 			log.Fatal(err)
 		}
 		fmt.Printf("%s\n", data)
-	}
-}
-
-func printJokes(jokes []Joke) {
-	for _, jk := range jokes {
-		fmt.Println(jk)
 	}
 }
