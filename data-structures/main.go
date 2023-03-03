@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func main() {
 	g := &Graph2{vertices: make([]*Vertex, 0), edges: make([]*Edge2, 0)}
 	for i := 1; i < 6; i++ {
@@ -15,5 +17,9 @@ func main() {
 
 	display(g.vertices)
 	displayNeighbours(g.vertices)
+
+	for _, e := range g.edges {
+		fmt.Println(e.src.value, e.dst.value, e.weight)
+	}
 
 }

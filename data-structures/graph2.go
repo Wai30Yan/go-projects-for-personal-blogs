@@ -30,14 +30,14 @@ func (g *Graph2) AddVertex(value int) {
 func (g *Graph2) AddWeightedEdge(src, dst int, w int) {
 	f1 := findVertex(g.vertices, src)
 	f2 := findVertex(g.vertices, dst)
-	fedge := findEdge(src, dst, g.edges)
+	edgeFound, _ := findEdge(src, dst, g.edges)
 
 	if !f1 || !f2 {
 		fmt.Printf("Cannot find vertex %d nor %d in the graph.\n", src, dst)
 		return
 	}
 
-	if fedge {
+	if edgeFound {
 		fmt.Printf("Edge from %d to %d already exists.\n", src, dst)
 		return
 	}
@@ -68,13 +68,13 @@ func findVertex(adj []*Vertex, value int) bool {
 	return false
 }
 
-func findEdge(src, dst int, edges []*Edge2) bool {
+func findEdge(src, dst int, edges []*Edge2) (bool, *Edge2) {
 	for _, v := range edges {
 		if v.src.value == src && v.dst.value == dst {
-			return true
+			return true, v
 		}
 	}
-	return false
+	return false, nil
 }
 
 func display(vertices []*Vertex) {
