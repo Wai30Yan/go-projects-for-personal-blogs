@@ -43,16 +43,46 @@ func (l *LinkedList) Search(head *Node, value int) bool {
 	} else {
 		return l.Search(head.next, value)
 	}
+}
 
+func (l *LinkedList) DeleteNode(v int) {
+	node := l.head
+
+	for node != nil {
+		if node.next.value == v {
+			deleteNode := node.next
+			node.next = deleteNode.next
+			fmt.Println("Deleting", deleteNode)
+			l.Display()
+			return
+		}
+		node = node.next
+	}
 }
 
 func (l *LinkedList) Display() {
-	if l.head == nil {
+	node := l.head
+	if node == nil {
 		return
 	}
 
-	for l.head != nil {
-		fmt.Println("display", l.head.value, l.head.next)
-		l.head = l.head.next
+	for node != nil {
+		fmt.Println("display", node.value, "\t", node.next)
+		node = node.next
 	}
 }
+
+// func main() {
+// 	l := &LinkedList{}
+// 	for i := 1; i < 6; i++ {
+// 		node := &Node{value: i}
+// 		l.InsertFromTail(node)
+// 	}
+// 	for i := 7; i < 15; i++ {
+// 		node := &Node{value: i}
+// 		l.InsertFromHead(node)
+// 	}
+// 	l.Display()
+// 	fmt.Println(l.Search(l.head, 12))
+// 	l.DeleteNode(12)
+// }
