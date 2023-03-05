@@ -60,6 +60,27 @@ func (l *LinkedList) DeleteNode(v int) {
 	}
 }
 
+func (l *LinkedList) ReverseList() {
+	var prev *Node
+	curr := l.head
+	
+	for curr != nil {
+		next := curr.next
+		curr.next = prev
+		prev = curr
+		curr = next
+	}
+	l.head = prev
+}
+
+func (l *LinkedList) ReversePrinting(head *Node) {
+	if head == nil {
+		return
+	}
+	l.ReversePrinting(head.next)
+	fmt.Printf("%d ", head.value)
+}
+
 func (l *LinkedList) Display() {
 	node := l.head
 	if node == nil {

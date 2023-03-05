@@ -3,8 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	arr := random(1, 20, 10)
-	fmt.Println(arr)
-	arr2 := mergeSort(arr)
-	fmt.Println(arr2)
+	arr1 := random(1, 15, 10)
+	fmt.Println(arr1)
+
+	quickSort(arr1, 0, len(arr1)-1)
+	fmt.Println(arr1)
 }
