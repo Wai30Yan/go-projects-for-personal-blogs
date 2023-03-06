@@ -59,6 +59,15 @@ func (g *Graph2) GetVertex(value int) *Vertex {
 	return nil
 }
 
+func (g *Graph2) GetEdge(src, dst int) *Edge2 {
+	for _, v := range g.edges {
+		if v.src.value == src && v.dst.value == dst {
+			return v
+		}
+	}
+	return nil
+}
+
 func findVertex(adj []*Vertex, value int) bool {
 	for _, v := range adj {
 		if v.value == value {
