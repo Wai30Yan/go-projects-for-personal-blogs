@@ -18,9 +18,9 @@ func longestCommonPrefix(strs []string) string {
 	result := ""
 	for _, l := range first {
 		result += string(l)
-		for d, each := range strs[1:] {
+		for _, each := range strs[1:] {
 			if strings.HasPrefix(each, result) {
-				d++
+				continue
 			} else {
 				return result[:len(result)-1]
 			}
